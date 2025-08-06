@@ -110,7 +110,7 @@ function handleFilterChange(filterId: string, value: FilterOptionValue): void {
   width: 100%;
   margin-bottom: 20px;
   @media (min-width: 768px) {
-    width: 232px;
+    max-width: 232px;
     margin-bottom: 0;
   }
 }
