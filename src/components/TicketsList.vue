@@ -11,8 +11,7 @@
 
       <BaseButton
         v-if="shouldShowLoadMoreButton"
-        :loading="isLoading"
-        :label="loadMoreButtonLabel"
+        label="Завантажити ще 5 квитків"
         filled
         @click="handleLoadMore"
       />
@@ -55,14 +54,8 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const showEmptyState = computed((): boolean =>
-  !props.isInitialLoading
-  && !props.error
-  && !!props.tickets.length
-  && !props.displayTickets.length,
-)
+const showEmptyState = computed((): boolean => !props.isInitialLoading && !props.error && !!props.tickets.length && !props.displayTickets.length)
 const shouldShowLoadMoreButton = computed((): boolean => props.hasMoreTicketsToDisplay && !!props.tickets.length && !props.error)
-const loadMoreButtonLabel = computed((): string => props.isLoading ? 'Завантажується...' : 'Завантажити ще 5 квитків')
 
 function handleLoadMore(): void {
   emit('loadMore')
