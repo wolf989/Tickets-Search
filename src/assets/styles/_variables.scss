@@ -1,0 +1,45 @@
+:root {
+	// Container Widths
+	--container-width: 794px;
+
+	// Fonts
+  --font-primary: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+	// Font Sizes
+	--font-size-xs: 10px;
+	--font-size-base: 12px;
+	--font-size-lg: 14px;
+
+	// Line Heights
+	--line-height-xs: 14px;
+	--line-height-base: 18px;
+	--line-height-lg: 20px;
+	--line-height-xl: 21px;
+
+	// Font Weights
+	--font-weight-normal: 400;
+	--font-weight-bold: 600;
+
+	// Letter Spacing
+	--letter-spacing-base: 0;
+	--letter-spacing-lg: 0.5px;
+
+
+	// Colors
+	--primary-background-color: #f3f7fa;
+	--primary-text-color: #4a4a4a;
+	--neutral-color: #ffffff;
+	--brand-color: #2196f3;
+	--error-color: #f44336;
+
+	// Transitions
+	--transition-base: all 0.3s ease;
+
+	// Spinner Animation
+	--spinner-animation: load-more-spin 1s linear infinite;
+}
+
+@keyframes load-more-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
