@@ -4,7 +4,6 @@ import { fetchTicketsBatch, initializeSearch } from '@/services/api'
 import { filterByStops, sortTickets } from '@/utils/ticketHelpers'
 
 const POLLING_CONFIG = {
-  maxAttempts: 50,
   delay: 1000,
   backoffMultiplier: 1.5,
 } as const
@@ -50,36 +49,30 @@ export function useTicketsSearch() {
     }
   }
 
-  async function pollTickets(searchId: string): Promise<void> {
-    let attempts = 0
+  async function pollTickets(searchId: string, attempts: number = 0): Promise<void> {
+    if (state.value.isCompleted)
+      return
 
-    while (!state.value.isCompleted && attempts < POLLING_CONFIG.maxAttempts) {
-      try {
-        const response = await fetchTicketsBatch(searchId)
+    try {
+      const response = await fetchTicketsBatch(searchId)
 
-        if (response.tickets.length)
-          state.value.tickets.push(...response.tickets)
+      if (response.tickets.length)
+        state.value.tickets.push(...response.tickets)
 
-        if (response.stop) {
-          state.value.isCompleted = true
-          break
-        }
-
-        attempts++
-        await sleep(POLLING_CONFIG.delay)
+      if (response.stop) {
+        state.value.isCompleted = true
+        return
       }
-      catch (error) {
-        console.warn(`Polling attempt ${attempts + 1} failed:`, error)
-        attempts++
 
-        const delay = POLLING_CONFIG.delay * POLLING_CONFIG.backoffMultiplier ** Math.min(attempts, 5)
-        await sleep(delay)
-      }
+      await sleep(POLLING_CONFIG.delay)
+      await pollTickets(searchId, 0)
     }
+    catch (error) {
+      console.warn(`Polling attempt ${attempts + 1} failed:`, error)
 
-    if (attempts >= POLLING_CONFIG.maxAttempts) {
-      console.warn('Max polling attempts reached')
-      state.value.isCompleted = true
+      const delay = POLLING_CONFIG.delay * POLLING_CONFIG.backoffMultiplier ** Math.min(attempts, 5)
+      await sleep(delay)
+      await pollTickets(searchId, attempts + 1)
     }
   }
 
